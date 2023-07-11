@@ -33,16 +33,44 @@
     </div>
 
     <div class="machines-data-container">
-        <button class="fetch-data-button">Get Machine Data</button>
-
+        <table>
+            <th class="middle" colspan="2"> Machines Part Info</th>
+            <tr><button class="fetch-data-button">Get Machine Data</button></tr>
         <form> 
-            <input class="sn-input" type="text" placeholder="sn" name="sn">
-            <input class="tank-liters-input" type="number" placeholder="tankLiters" name="tankLiters">
-            <input class="user-input" type="text" placeholder="user" name="user">
+            <tr>
+                <td>
+                    <label for="S/N">SN: </label>
+                </td>
+                <td>
+                    <input class="sn-input" type="text" placeholder="SN" name="sn">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="tank_size">Tank Size: </label>
+                </td>
+                <td>
+                    <input class="tank-liters-input" type="number" step='0.1' placeholder="Tank Liters" name="tankLiters">
+                </td>
+            </tr>
+           <tr>
+                <td>
+                    <label for="last_user">Last User: </label>
+                </td>
+                <td>
+                    <input class="user-input" type="text" placeholder="User" name="user">
+                </td>
+           </tr>
+           <tr>
             <button class="post-button" type="submit">Submit!</button>
-            <p>Please input data above</p>
+           </tr>
         </form>
 
+      </body>
+      <tr>
+        <p>Please input data above</p>
+      </tr>
+    </table>
     </div>
 
     

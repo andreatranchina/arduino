@@ -24,13 +24,13 @@ const handleClickGet = async () => {
         const tableHead = document.createElement("thead");
         const tableHeadRow = document.createElement("tr");
 
-        const tableHeadSn = document.createElement("td");
+        const tableHeadSn = document.createElement("th");
         tableHeadSn.innerText = "SN";
 
-        const tableHeadTankLiters = document.createElement("td");
+        const tableHeadTankLiters = document.createElement("th");
         tableHeadTankLiters.innerText = "Tank Liters";
 
-        const tableHeadUser = document.createElement("td");
+        const tableHeadUser = document.createElement("th");
         tableHeadUser.innerText = "User";
 
         tableHeadRow.appendChild(tableHeadSn);
@@ -94,9 +94,6 @@ const handleClickPost = async (event) => {
       } catch (error) {
         console.error("Error:", error);
       }
-
-
-
 }
 
 postButton.addEventListener("click", handleClickPost)

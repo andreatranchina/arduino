@@ -2,6 +2,30 @@
     color: blue;
 }
 
-table, th, td {
+table, tr {
     border: 1px solid black;
+    font-family: 'Open Sans', sans-serif;
+    width: 30%;
+	text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th {
+    background-color: palegreen;
+  }
+  tr:nth-child(odd) {background-color: #f2f2f2;}
+
+form {
+    border: 1px black;
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
+}
+
+p{
+    text-align:center;
+}
+.middle {
+    text-align: center;
+    background-color: plum;
 }
