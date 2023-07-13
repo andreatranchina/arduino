@@ -1,6 +1,6 @@
 body {
     margin: 0px;
-    padding: 0px;
+    padding: 50px;
 }
 
 .output {
@@ -9,13 +9,16 @@ body {
 
 #rData {
     float: left;
-    margin-left: 100px;
+    /* display: inline-block; */
+    margin-left: 50px;
     margin-right: auto;
     width: 470px;
 }
 
 #sData {
-    float: left;
+    /* float: left; */
+    /* display: inline-block; */
+    /* margin-left: 50px; */
     margin-left: 100px;
     margin-right: auto;
     width: 470px;
@@ -26,7 +29,8 @@ h2 {
 }
 
 #myCanvas {
-    border: 2px dashed grey;
+    /* border: 2px dashed grey; */
+    border: 2px dashed black;
 }
 
 #btnHolder,

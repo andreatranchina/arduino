@@ -1,7 +1,110 @@
-.fetch-data-button{
-    color: blue;
+body{
+    background-image: radial-gradient(rgb(60, 118, 60), rgb(38, 47, 38), rgb(24, 28, 27));
+    color: white;
+}
+
+.navbar{
+    background-color: rgb(60, 118, 60);
+    margin: 0;
+    padding: 0px;
+    width: 100%;
 }
 
 table, th, td {
     border: 1px solid black;
+    margin: 2rem auto;
+}
+
+.machines-data-container{
+    display: block;
+    position: relative;
+    top: 2rem;
+    text-align: center;
+}
+
+.fetch-data-button{
+    width: 250px;
+    height: 50px;
+    border-radius: 1rem;
+    background-color: rgb(128, 187, 128);
+    border: 1px solid black;
+    color: black;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 1px grey;
+    font-weight: 700;
+    margin: 3rem auto;
+    box-shadow: 2px 2px 2px black;
+    transition: 500ms ease;
+}
+
+.fetch-data-button:hover{
+    cursor: pointer;
+    width: 280px;
+    box-shadow: none;
+    transition: 500ms ease;
+}
+
+.post-data-button{
+    width: 250px;
+    height: 50px;
+    border-radius: 1rem;
+    background-color: rgb(128, 187, 128);
+    border: 1px solid black;
+    color: black;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 1px grey;
+    font-weight: 700;
+    margin: 1.5rem auto;
+    box-shadow: 2px 2px 2px black;
+    transition: 500ms ease;
+    display: block;
+}
+
+.post-data-button:hover{
+    cursor: pointer;
+    width: 280px;
+    box-shadow: none;
+    transition: 500ms ease;
+}
+
+.edit-data-button{
+    width: 250px;
+    height: 50px;
+    border-radius: 1rem;
+    background-color: rgb(128, 187, 128);
+    border: 1px solid black;
+    color: black;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 1px grey;
+    font-weight: 700;
+    margin: 1.5rem auto;
+    box-shadow: 2px 2px 2px black;
+    transition: 500ms ease;
+    display: block;
+}
+
+.edit-data-button:hover{
+    cursor: pointer;
+    width: 280px;
+    box-shadow: none;
+    transition: 500ms ease;
+}
+
+#sandBox{
+    margin: 50px 0;
+}
+
+.input-post{
+    width: 250px;
+    margin: 5px;
+}
+
+
+.input-post{
+    background-color: rgb(128, 187, 128);
+    color: black
+}
+
+::placeholder{
+    color: rgb(46, 42, 42);
 }

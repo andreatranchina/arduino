@@ -15,9 +15,15 @@
 
 
 <body>
+    <!-- <nav class="navbar">
+        SolarMelts
+    </nav> -->
     <div id="rData" class="output">
         <h2>Data from Arduino</h2>
         <canvas id="myCanvas" width="460" height="540"></canvas>
+        <div id="sandBox">
+            <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
+        </div>
     </div>
     <div id="sData" class="output">
         <h2>Data to Arduino</h2>
@@ -27,21 +33,23 @@
         </div>
         <p id="sliderTxt">LED Dimmer</p>
         <div id="slider"></div>
-        <div id="sandBox">
+        <!-- <div id="sandBox">
             <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
-        </div>
+        </div> -->
     </div>
 
     <div class="machines-data-container">
         <button class="fetch-data-button">Get Machine Data</button>
 
-        <form> 
-            <input class="sn-input" type="text" placeholder="sn" name="sn">
-            <input class="tank-liters-input" type="number" placeholder="tankLiters" name="tankLiters">
-            <input class="user-input" type="text" placeholder="user" name="user">
-            <button class="post-button" type="submit">Submit!</button>
-            <p>Please input data above</p>
-        </form>
+        <!-- <form>  -->
+            <div>
+                <input id="sn-input" class="input-post" type="text" placeholder="sn" name="sn">
+                <input id="tank-liters-input" class="input-post" type="number" placeholder="tankLiters" name="tankLiters">
+                <input id="user-input" class="input-post" type="text" placeholder="user" name="user">
+                <button class="post-data-button">Submit New!</button>
+            </div>
+
+        <!-- </form> -->
 
     </div>
 
