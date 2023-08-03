@@ -130,19 +130,25 @@ router.post('/machines', function(req, res, next) {
 })
 
 router.put('/machines/:id', function(req, res, next) {
-    const id = req.params.id;
+    console.log("running put");
+    const paramId = parseInt(req.params.id);
+    console.log("paramId: " + paramId);
 
-    if (!req.body.sn){
-        machines[id].sn = req.body.sn;
+    const index = machines.findIndex((machine) => machine.id === paramId);
+    console.log("index: " + index);
+    console.log("body " + JSON.stringify(req.body));   
+
+    if (req.body.sn){
+        machines[index].sn = req.body.sn;
     }
-    if (!req.body.tankLiters){
-        machines[id].tankLiters = req.body.tankLiters;
+    if (req.body.tankLiters){
+        machines[index].tankLiters = req.body.tankLiters;
     }
-    if (!req.body.user){
-        machines[id].user = req.body.user;
+    if (req.body.user){
+        machines[index].user = req.body.user;
     }
 
-    res.json(machines[id]);
+    res.json(machines[index]);
 });
 
 router.delete('/machines/:id', function(req, res, next) {
