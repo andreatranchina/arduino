@@ -70,10 +70,10 @@ const handleClickGet = async () => {
 
             const tableCellEdit = document.createElement("td");
             tableCellEdit.innerHTML = "✏️";
-            tableCellEdit.addEventListener("click", () => {
-              isEditing = true;
-              showEditTable();
-            })
+            // tableCellEdit.addEventListener("click", () => {
+            //   isEditing = true;
+            //   showEditTable();
+            // })
 
             const tableCellDelete = document.createElement("td");
             tableCellDelete.innerHTML = "🗑️";
@@ -88,15 +88,16 @@ const handleClickGet = async () => {
 
             machinesTable.push({
               id: resJson[i].id,
+              row: tableRow,
               snCell: tableCellSn,
               tankLitersCell: tableCellTankLiters,
               user: tableCellUser,
               editButton: tableCellEdit,
               deleteButton: tableCellDelete
             });
-            console.log(machinesTable);
 
             tableCellDelete.addEventListener("click", (event) => handleClickDelete(event, resJson[i].id));
+            tableCellEdit.addEventListener("click", (event) => handleClickEdit(event, resJson[i].id));
         }
         isFetched = true;
       }
@@ -142,7 +143,9 @@ tankLitersInput.addEventListener("input", handleInputTankLiters);
 const handleClickPost = async () => {
   console.log("post was clicked");
   console.log(sn);
-
+    if(!isFetched || !sn || !tankLiters || !user){
+      return;
+    }
       try {
         const newMachine = {
           sn: sn,
@@ -161,7 +164,6 @@ const handleClickPost = async () => {
         const responseJson = await response.json();
         console.log("Success:", responseJson);
 
-        if(isFetched){
           const tableRow = document.createElement("tr");
           tableRow.style.border = "1px solid black";
           const tableCellSn = document.createElement("td");
@@ -175,10 +177,6 @@ const handleClickPost = async () => {
 
           const tableCellEdit = document.createElement("td");
           tableCellEdit.innerHTML = "✏️";
-          tableCellEdit.addEventListener("click", () => {
-            isEditing = true;
-            showEditTable();
-          })
 
           const tableCellDelete = document.createElement("td");
           tableCellDelete.innerHTML = "🗑️";
@@ -193,6 +191,7 @@ const handleClickPost = async () => {
 
           machinesTable.push({
             id: responseJson.id,
+            row: tableRow,
             sn: tableCellSn,
             tankLiters: tableCellTankLiters,
             user: tableCellUser,
@@ -201,7 +200,7 @@ const handleClickPost = async () => {
           });
 
           tableCellDelete.addEventListener("click", (event) => handleClickDelete(event, responseJson.id));
-        }
+          tableCellEdit.addEventListener("click", (event) => handleClickEdit(event, resJson[i].id));
 
         snInput.value = "";
         userInput.value = "";
@@ -215,47 +214,16 @@ const handleClickPost = async () => {
 
 postDataButton.addEventListener("click", handleClickPost);
 
-
-//Show post table
-// const ShowPostTable = () => {
-//   if(isFetched){
-//     const postHeader = document.createElement("h2");
-//     postHeader.innerHTML = "Post Form"
-
-//     const postForm = document.createElement("form")
-//     const postSn = document.createElement("input")
-//     const postUser = document.createElement("input")
-//     const postTankLiters = document.createElement("input");
-
-//     const submitPostButton = document.createElement("button");
-//     submitPostButton.innerHTML = "Submit New!";
-
-//     postTankLiters.setAttribute("id", "tank-liters-input");
-//     postSn.setAttribute("id", "sn-input");
-//     postSn.setAttribute("id", "user-input");
-
-//     postTankLiters.classList.add("input-post");
-//     postSn.classList.add("input-post");
-//     postUser.classList.add("input-post");
-//     submitPostButton.classList.add("post-data-button");
-
-//     postTankLiters.placeholder = "tankLiters";
-//     postUser.placeholder = "user";
-//     postSn.placeholder = "sn";
-  
-    
-//     postForm.append(postHeader, postSn, postTankLiters, postUser, submitPostButton);
-//     machinesDataContainer.appendChild(postForm);
-//   }
-// }
-
-
 //***********EDITING */
 
-const showEditTable = () =>{
-  if(isEditing){
+
+const handleClickEdit = (event, id) =>{
+  if(!isEditing){
+    isEditing = true;
     const editHeader = document.createElement("h2");
-    editHeader.innerHTML = "Edit Form"
+    editHeader.innerHTML = "Edit Form (machine SN: " + machinesTable[id-1].snCell.innerHTML + ")";
+    editHeader.style.display= "inline";
+
 
     const editForm = document.createElement("form")
     const editSnInput = document.createElement("input")
@@ -265,73 +233,138 @@ const showEditTable = () =>{
     const submitEditButton = document.createElement("button");
     submitEditButton.innerHTML = "Submit Edits!";
 
+    const shutFormButton = document.createElement("button");
+    shutFormButton.innerHTML = "↩";
+
+    const headerDiv = document.createElement("div");
+    headerDiv.append(editHeader, shutFormButton);
+
     editTankLitersInput.classList.add("input-post");
     editSnInput.classList.add("input-post");
     editUserInput.classList.add("input-post");
+
     submitEditButton.classList.add("edit-data-button");
+    shutFormButton.classList.add("shut-form-button")
 
     editTankLitersInput.placeholder = "tankLiters";
     editUserInput.placeholder = "user";
     editSnInput.placeholder = "sn";
   
     
-    editForm.append(editHeader, editSnInput, editTankLitersInput, editUserInput, submitEditButton);
+    editForm.append(headerDiv, editSnInput, editTankLitersInput, editUserInput, submitEditButton);
     machinesDataContainer.appendChild(editForm);
-
-
 
     let currentEditSn = "";
     let currentEditTankLiters = "";
     let currentEditUser = "";
 
     const handleInputEditSn = (event) => {
-      // sn = snInput.value;
       currentEditSn = event.target.value;
-      console.log("i was changed");
+      console.log(currentEditSn);
     }
     
     const handleInputEditUser = (event) => {
       currentEditUser = event.target.value;
+      console.log(currentEditUser);
     }
     
     const handleInputEditTankLiters = (event) => {
       currentEditTankLiters = event.target.value;
+      console.log(currentEditTankLiters);
     }
 
 
-    const handleClickEdit = async (event) => {
+    const handleClickSubmitEdit = async (event, id) => {
+      event.preventDefault();
       try {
         const editedMachine = {
           sn: currentEditSn,
           tankLiters: currentEditTankLiters,
           user: currentEditUser,
-        }  
+        }
+        console.log("edited machine: " + JSON.stringify(editedMachine))  
 
-        const response = await fetch("http://localhost:3001/machines", {
+        const response = await fetch(`http://localhost:3001/machines/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(editedMachine),
         });
-    
+
         const responseJson = await response.json();
         console.log("Success:", responseJson);
+        //remove old row
+        const index = machinesTable.findIndex((machine) => machine.id === id);
+        table.removeChild(machinesTable[index].row);
+        machinesTable.splice(index, 1);
 
-        snInput.value = "";
-        userInput.value = "";
-        tankLitersInput.value = "";
+        //add new edited row
+        const tableRow = document.createElement("tr");
+        tableRow.style.border = "1px solid black";
+        const tableCellSn = document.createElement("td");
+        tableCellSn.innerText = responseJson.sn;
+
+        const tableCellTankLiters = document.createElement("td");
+        tableCellTankLiters.innerHTML = responseJson.tankLiters;
+
+        const tableCellUser = document.createElement("td");
+        tableCellUser.innerHTML = responseJson.user;
+
+        const tableCellEdit = document.createElement("td");
+        tableCellEdit.innerHTML = "✏️";
+        tableCellEdit.addEventListener("click", () => {
+          isEditing = true;
+          showEditTable();
+        })
+
+        const tableCellDelete = document.createElement("td");
+        tableCellDelete.innerHTML = "🗑️";
+
+        tableRow.appendChild(tableCellSn);
+        tableRow.appendChild(tableCellTankLiters);
+        tableRow.appendChild(tableCellUser);
+        tableRow.appendChild(tableCellEdit);
+        tableRow.appendChild(tableCellDelete);
+
+        table.appendChild(tableRow);
+
+        machinesTable.push({
+          id: responseJson.id,
+          row: tableRow,
+          sn: tableCellSn,
+          tankLiters: tableCellTankLiters,
+          user: tableCellUser,
+          editButton: tableCellEdit,
+          deleteButton: tableCellDelete,
+        });
+
+        tableCellDelete.addEventListener("click", (event) => handleClickDelete(event, responseJson.id));
+        tableCellEdit.addEventListener("click", (event) => handleClickEdit(event, resJson[i].id));
+
+
+
+        editSnInput.value = "";
+        editUserInput.value = "";
+        editTankLitersInput.value = "";
+
+        isEditing = "false";
 
       } catch (error) {
         console.error("Error:", error);
       }
 
-    }  
+    } 
+    const handleClickShutForm = () => {
+      machinesDataContainer.removeChild(editForm);
+      isEditing = false;
+    } 
 
-    userInput.addEventListener("input", handleInputEditUser);
-    snInput.addEventListener("input", handleInputEditSn);
-    tankLitersInput.addEventListener("input", handleInputEditTankLiters);
-    submitEditButton.addEventListener("click", handleClickEdit);
+    editUserInput.addEventListener("input", handleInputEditUser);
+    editSnInput.addEventListener("input", handleInputEditSn);
+    editTankLitersInput.addEventListener("input", handleInputEditTankLiters);
+    submitEditButton.addEventListener("click", (event) => handleClickSubmitEdit(event, id));
+    shutFormButton.addEventListener("click", handleClickShutForm);
   }
 }  
 
@@ -345,6 +378,12 @@ const handleClickDelete = async (event, id) => {
     });
     const responseJson = await response.json();
     console.log("Success:", responseJson);
+
+    const index = machinesTable.findIndex((machine) => machine.id === id);
+    table.removeChild(machinesTable[index].row);
+    machinesTable.splice(index, 1);
+
+    console.log(machinesTable);
   }
   catch(error){
     console.log(error);
