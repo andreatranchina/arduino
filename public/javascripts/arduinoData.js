@@ -1,3 +1,35 @@
+const startTime = document.getElementById('start-time');
+const endTime = document.getElementById('end-time');
+const labelToggle = document.getElementById('label-toggle');
+const buttonToggle = document.getElementById('check');
+const temperature = document.getElementById('temperature');
+
+let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
+const timeElapsed = document.getElementById('time-elapsed');
+let intTime = null;
+
+function displayTimer(){
+    milliseconds+=10;
+    if(milliseconds == 1000){
+        milliseconds = 0;
+        seconds++;
+        if(seconds == 60){
+            seconds = 0;
+            minutes++;
+            if(minutes == 60){
+                minutes = 0;
+                hours++;
+            }
+        }
+    }
+ let h = hours < 10 ? "0" + hours + " hrs" : hours + " hrs";
+ let m = minutes < 10 ? "0" + minutes + " min" : minutes + " min";
+ let s = seconds < 10 ? "0" + seconds + " s" : seconds + " s";
+ let ms = milliseconds < 10 ? "00" + milliseconds + " ms" : milliseconds < 100 ? "0" + milliseconds + " ms" : milliseconds + " ms";
+ timeElapsed.innerText = `Time elapsed: ` + ` ${h} : ${m} : ${s} : ${ms}`;
+}
+
+
 /*handle the sending of data to webpage*/
 window.requestAnimFrame = (function(callback) {
     return window.requestAnimationFrame ||
@@ -69,8 +101,51 @@ window.onload = function() {
 //activate Toggle Button Click Event
 $(document).ready(function() {
     $('#check').click(function() {
+        console.log("clicked");
         toggleVal += 1;
         toggleVal %= 2; //switches btwn 0 & 1
+
+        if (toggleVal === 0) {
+            timeElapsed.innerText = "Time Elapsed: " + "00 : 00 : 00 : 000 ";
+            // labelToggle.innerHTML = "Toggle Off";
+            // $('#check').innerHTML = "Toggle Off";
+            buttonToggle.innerHTML = "Toggle Off";
+
+            var today = new Date();
+            var dateStart = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var timeStart = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTimeStart = dateStart +' '+ timeStart;
+            // const startTime = document.getElementById('start-time');
+            startTime.innerText = 'Start Time : ' + dateTimeStart;
+
+            if(intTime!==null){
+                clearInterval(intTime);
+            }
+
+            intTime = setInterval(displayTimer,10);
+
+            endTime.innerText = 'End Time: ';
+          
+        }
+
+        else {
+            // labelToggle.innerHTML = "Toggle On"; 
+            // $('#check').innerHTML = "Toggle On";
+            buttonToggle.innerHTML = "Toggle On";
+
+            var today = new Date();
+            var dateEnd = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var timeEnd = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTimeEnd = dateEnd +' '+ timeEnd;
+            // const endTime = document.getElementById('end-time');
+            endTime.innerText = 'End Time : ' + dateTimeEnd; 
+
+
+            clearInterval(intTime);
+            [milliseconds,seconds,minutes,hours] = [0,0,0,0];
+            // timeElapsed.innerText = "00 : 00 : 00 : 000 ";
+        }
+
         iosocket.emit('buttonval', toggleVal);
     });
 });
@@ -87,20 +162,21 @@ function animation(poll1, text) {
     // clear canvas
     content.clearRect(0, 0, 460, 540);
 
-    content.fillStyle = 'black';
+    content.fillStyle = '#313774';
     content.textAlign = 'center';
-    content.font = '20pt Calibri';
+    content.font = '22pt Roboto';
 
     // make the wobbely values stop 
-    if (pollOneH * 2 > prevPotValue + 2 || pollOneH * 2 < prevPotValue - 2) {
+    // if (pollOneH * 2 > prevPotValue + 2 || pollOneH * 2 < prevPotValue - 2) {
         prevPotValue = potValue;
-        potValue = pollOneH * 2;
-    }
+        potValue = pollOneH * 2 / 16;
+    // }
 
-    content.fillText('Potmeter value: ' + potValue, text.x, text.y);
+    content.fillText('Temperature: ' + potValue + ' °C', text.x, text.y);
+    temperature.innerHTML = potValue + ' °C';
 
     // render graph 
-    content.fillStyle = 'green';
+    potValue < 26 ? content.fillStyle = 'rgb(53, 53, 206)' : potValue < 29 ? content.fillStyle = 'rgb(205, 205, 37)' : content.fillStyle = 'red';
     content.fillRect(poll1.x, (poll1.y - poll1.h), poll1.w, poll1.h);
 
     content.fill();
@@ -109,9 +185,9 @@ function animation(poll1, text) {
     requestAnimFrame(function() {
         // console.log("got here")
         if (poll1.h < pollOneH) {
-            poll1.h += (pollOneH - poll1.h) * .15;
+            poll1.h += (pollOneH - poll1.h) * 0.15;
         } else if (poll1.h > pollOneH) {
-            poll1.h -= (poll1.h - pollOneH) * .15;
+            poll1.h -= (poll1.h - pollOneH) * 0.15;
         }
         text.y = (poll1.y - poll1.h) - 5;
         animation(poll1, text);
@@ -129,7 +205,7 @@ function initSocketIO() {
     console.log("init Socket via webpage!!");
     iosocket.on('onconnection', function(value) {
         var varInd = parseSerialData(value) //sets values for unoData array
-        pollOneH = unoData[varInd == undefined ? 0 : varInd] / 2; // recieve start poll value from server
+        pollOneH = unoData[varInd == undefined ? 0 : varInd] * 8; // recieve start poll value from server
 
         initPoll();
         initButton();
@@ -140,9 +216,9 @@ function initSocketIO() {
 
     });
     // recieve changed values by other client from server
-    iosocket.on('update', function(recievedData) {
-        var varInd = parseSerialData(recievedData); //unoData[] val has been updated
-        pollOneH = unoData[varInd] / 2; // recieve start poll value from server
+    iosocket.on('update', function(receivedData) {
+        var varInd = parseSerialData(receivedData); //unoData[] val has been updated
+        pollOneH = unoData[varInd] * 8; // recieve start poll value from server
         //pollOneH is the main variable for the animation() func
 
     });
@@ -166,9 +242,9 @@ function initPoll() {
     animation(poll1, text);
 }
 
-function initButton() {
-    $("#check").button();
-}
+// function initButton() {
+//     $("#check").button();
+// }
 
 function initSlider() {
     $("#slider").slider({
@@ -230,10 +306,10 @@ function parseSerialData(data) {
         all other values 'xxxx' are the actual data from the SCOM port
         */
         let keyNum = val.indexOf('_');
-        let unoIndex = parseInt(val.substring(keyNum + 1, keyNum + 2), 10); //only using values 0-9 for the index
+        let unoIndex = parseFloat(val.substring(keyNum + 1, keyNum + 4), 10.00); //only using values 0-9 for the index
 
         val = val.substring(val.indexOf('_') + 2); //isolate just the data value
-        val = parseInt(val, 10);
+        val = parseFloat(val, 10.00);
 
         unoData[unoIndex] = val;
 
