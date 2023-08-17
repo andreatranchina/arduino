@@ -16,7 +16,15 @@ var socketServer;
 var serialPort;
 var portName = '/dev/tty.usbmodem14201'; //change this to your Arduino port
 // var PortName = ''
+// var sendData = {
+//     temp: "",
+//     water: "",
+// };
 var sendData = "";
+var sendDataWater = "";
+
+var sendDataObject = {
+}
 
 var verbose = true;
 
@@ -62,11 +70,17 @@ function initSocketIO(httpServer, verbose) {
         //socket.emit('update', { pollOneValue: sendData });
 
         socket.on('buttonval', function(data) {
+            console.log("called1")
             serialPort.write(data + 'E');
         });
         socket.on('sliderval', function(data) {
             serialPort.write(data + 'P');
         });
+
+        socket.on('buttonval2', function(data) {
+            console.log("called2");
+            serialPort.write(data + 'D');
+        })
 
     });
 
@@ -93,14 +107,28 @@ function serialListener(verbose) {
     });
 
     serialPort.on('data', function(data) {
+        // console.log(data.toString());
         receivedData += data.toString();
         if (receivedData.indexOf('E') >= 0 && receivedData.indexOf('B') >= 0) {
+
             sendData = receivedData.substring(receivedData.indexOf('B') + 1, receivedData.indexOf('E'));
-            receivedData = '';
             console.log(sendData)
+            receivedData = '';
+            // sendDataObject.temp = receivedData.substring(receivedData.indexOf('B') + 1, receivedData.indexOf('E'));
         }
+
+        if (receivedData.indexOf('A') >= 0 && receivedData.indexOf('Z') >= 0) {
+            sendDataWater = receivedData.substring(receivedData.indexOf('A') + 1, receivedData.indexOf('Z'));
+            console.log(sendDataWater);
+            receivedData = '';
+            // sendDataObject.water = receivedData.substring(receivedData.indexOf('A') + 1, receivedData.indexOf('Z'));
+        }
+        // console.log(sendDataObject)
+
         // send the incoming data to browser with websockets.
         socketServer.emit('update', { unoData: sendData });
+        socketServer.emit('updateWater', sendDataWater);
+        // socketServer.emit('update', sendDataObject);
     });
 
 }

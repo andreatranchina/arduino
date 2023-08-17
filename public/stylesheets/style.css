@@ -135,6 +135,12 @@ h2 {
 
 }
 
+#water-level{
+    font-size: 2.2rem;
+    position: relative;
+    top: 0.4rem;
+}
+
 #water-level-data{
     grid-area: 3 / 4 / 4 / 5;
     /* background-color: #5BD1FB; */
