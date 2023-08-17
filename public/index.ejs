@@ -8,61 +8,76 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/javascripts/arduinoData.js"></script>
+    <!-- <script src="/javascripts/arduinoData.js"></script> -->
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <!-- <script src="./javascripts/ajaxRequests.js"> charset="UTF-8"</script> -->
 </head>
 
 
 <body>
-    <!-- <nav class="navbar">
-        SolarMelts
-    </nav> -->
-    <div id="rData" class="output">
-        <h2>Data from Arduino</h2>
-        <canvas id="myCanvas" width="460" height="540"></canvas>
-        <div id="sandBox">
-            <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
-        </div>
+    <div id="navbar">
+        <img alt="logo" src="https://i.ibb.co/ry8H1Fn/Screen-Shot-2023-08-15-at-1-32-51-PM.png" width="27" height="27"/>
+        Dashboard
+        <img alt="logo" src="https://i.ibb.co/ry8H1Fn/Screen-Shot-2023-08-15-at-1-32-51-PM.png" width="27" height="27"/>
     </div>
-    <div id="sData" class="output">
-        <h2>Data to Arduino</h2>
-        <div id="btnHolder">
-            <p id="helpBox"></p>
-            <input type="checkbox" id="check" value="toggle" /><label for="check">Toggle LED</label>
-        </div>
-        <p id="sliderTxt">LED Dimmer</p>
-        <div id="slider"></div>
-        <!-- <div id="sandBox">
-            <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
-        </div> -->
-    </div>
+    <div id="body-container">
+        <!-- <div id="rData" class="output"> -->
+            <canvas id="myCanvas" width="460" height="540" class="data-card"></canvas>
+            <!-- <div id="sandBox">
+                <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
+            </div> -->
+        <!-- </div> -->
 
-    <div class="machines-data-container">
-        <button class="fetch-data-button">Get Machine Data</button>
+        <!-- <div id="sData" class="output"> -->
+            <div id="btnHolder" class="data-card">
+                <h2>Pump Input</h2>
+                <!-- <button id="check" value="toggle">Toggle On</button> -->
+                <span>OFF</span>
+                <label class="switch">
+                    <input type="checkbox" id="check" value="toggle" >
+                    <span class="slider round"></span>
+                </label>
+                <span>ON</span>
 
-        <!-- <form>  -->
-            <div>
-                <h2>Post Form</h2>
-                <input id="sn-input" class="input-post" type="text" placeholder="sn" name="sn">
-                <input id="tank-liters-input" class="input-post" type="number" placeholder="tankLiters" name="tankLiters">
-                <input id="user-input" class="input-post" type="text" placeholder="user" name="user">
-                <button class="post-data-button">Submit New!</button>
+                <div class="stopwatch-container">
+                    <p id="start-time">Start Time: </p>
+                    <p id='end-time'>End Time: </p>  
+                    <p id="time-elapsed">Time Elapsed: </p>              
+                </div>
             </div>
+        <!-- </div> -->
+        <div id="slot2" class="data-card">
+            <h2>VEVOR Input</h2>
+            <!-- <button id="check2" value="toggle">Toggle On</button> -->
+            <span>OFF</span>
+            <label class="switch">
+                <input type="checkbox" id="check2" value="toggle">
+                <span class="slider round"></span>
+            </label>
+            <span>ON</span>
+            <div>
+                <p id="start-time2">Start Time: </p>
+                <p id='end-time2'>End Time: </p>  
+                <p id="time-elapsed2">Time Elapsed: </p>              
+            </div>
+        </div>
 
-        <!-- </form> -->
+        <div id="temperature-data" class="data-card">
+            <h2>Temperature</h2>
+            <div class="temperature-border">
+                <h2 id="temperature">75°C</h2>
+            </div>
+            <span class="thermometer-emoji">🌡️</span>
+        </div>
 
+        <div id="water-level-data" class="data-card">
+            <h2>Water Level</h2>
+            <h2 id="water-level">Safe ✔</h2>
+            <!-- <h2>Unsafe ❌</h2> -->
+        </div>
     </div>
 
-    
-
-    <!-- <script>
-        const fetchDataButton = document.querySelector(".fetch-data-button");
-        fetchDataButton.addEventListener("click", () => {
-            console.log("I got clicked");
-        })
-    </script> -->
-
+    <script src="/javascripts/arduinoData.js"></script>
     <script src="./javascripts/ajaxRequests.js" charset="UTF-8"></script>
 
 

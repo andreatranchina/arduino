@@ -72,6 +72,14 @@ $(document).ready(function() {
     $('#check').click(function() {
         toggleVal += 1;
         toggleVal %= 2; //switches btwn 0 & 1
+        $('#check').innerText = "start toggle";
+
+        if (toggleVal === 0) {
+            $('#check').innerHTML = "toggle on";           
+        }
+        else {
+            $('#check').innerHTML = "toggle off";  
+        }
         iosocket.emit('buttonval', toggleVal);
     });
 });
